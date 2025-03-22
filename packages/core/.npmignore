@@ -1,0 +1,10 @@
+/src
+/test
+/**/*.test.*
+/node_modules
+/vite.config.*
+/tsconfig*.json
+/example
+README.dev.md
+*.log
+*.tsbuildinfo

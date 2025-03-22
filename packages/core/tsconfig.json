@@ -1,0 +1,11 @@
+// packages/core/tsconfig.json
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+      "outDir": "dist",
+      "rootDir": "src",
+      "jsx": "react-jsx"  // 👈 This is the fix
+    },
+    "include": ["src"]
+  }
+  

@@ -1,0 +1,30 @@
+{
+  "name": "@diginet/class-hooks",
+  "version": "0.1.0",
+  "description": "Use React hooks in class components with field bindings",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc && tsc --module commonjs --outDir dist/cjs",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Digianderswestbergnet",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^17 || ^18"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
