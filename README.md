@@ -1,7 +1,5 @@
-# react-use-inheritance
+# class-hooks
 
-Use OOP-style inheritance, decorators, and hook bridges in React class components.
+Use OOP-style inheritance AND hooks in React class components.
 
----
-
-Work in progress.
+See packages/core
