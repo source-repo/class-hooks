@@ -19,7 +19,11 @@
     "build": "tsc && tsc --module commonjs --outDir dist/cjs",
     "prepublishOnly": "npm run build"
   },
-  "author": "Digianderswestbergnet",
+  "author": "anderswestberg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/source-repo/class-hooks.git"
+  },
   "license": "MIT",
   "peerDependencies": {
     "react": "^17 || ^18"
