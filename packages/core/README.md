@@ -4,47 +4,35 @@
 
 This library lets you bind React hooks to class component fields, giving you the power of hooks while preserving an OOP-style structure.
 
-## ✨ Features
+React hooks revolutionized component logic by promoting composition over inheritance. But they also made class components feel obsolete — especially when trying to reuse stateful logic.
 
-- ✅ Access hook results as class instance fields
-- ✅ Works with multiple hooks
-- ✅ Full TypeScript support with auto-inferred types
-- ✅ ESM-first, with CommonJS fallback
-- ❌ No HOCs or decorators needed
+@diginet/class-hooks brings the best of both worlds:
+- It lets you use modern React hooks inside class components.
+- It gives each hook a clean, typed field on the class.
+- It avoids messy patterns like higher-order components or verbose lifecycle glue.
 
-## 📦 Installation
+Powerful, composable logic without sacrificing inheritance when needed.
+
+## Features
+
+- Access hook results as class instance fields
+- Works with multiple hooks
+- Full TypeScript support with auto-inferred types
+- ESM-first, with CommonJS fallback
+- No HOCs or decorators needed
+
+## Installation
 
 ```bash
 npm install @diginet/class-hooks
 ```
 
-## 🚀 Usage
+## Usage
 
 ```tsx
 import React from 'react';
 import { classHooks } from '@diginet/class-hooks';
-
-// Example custom hooks
-function useWindowWidth() {
-  const [width, setWidth] = React.useState(window.innerWidth);
-  React.useEffect(() => {
-    const handler = () => setWidth(window.innerWidth);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
-  }, []);
-  return width;
-}
-
-function useCurrentTime() {
-  const [time, setTime] = React.useState(new Date().toLocaleTimeString());
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date().toLocaleTimeString());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  return time;
-}
+import { useWindowWidth, useCurrentTime } from 'someHooks.js'
 
 const hooks = {
   windowWidth: useWindowWidth,
@@ -64,13 +52,13 @@ class MainDisplay extends classHooks(hooks) {
 }
 ```
 
-## 🔍 How it works
+## How it works
 
 Internally, your hooks are rendered as hidden components. Their return values are injected into your class through a `hookValues` property, with proper typing.
 
 Use `this.renderClassHooks()` once in your render tree to activate the internal sync.
 
-## 🛠 API
+## API
 
 ### `classHooks(hooks)`
 
@@ -90,7 +78,7 @@ Inside your component, you'll have access to:
 - `this.renderClassHooks()` – renders hidden bridge components
 - `this.getHookFieldNames()` – returns array of hook names
 
-## 🧱 Example
+## Example
 
 ```tsx
 function useNow() {
@@ -113,6 +101,6 @@ class Clock extends classHooks(hooks) {
 }
 ```
 
-## 📄 License
+## License
 
-MIT © Diginet
+MIT
