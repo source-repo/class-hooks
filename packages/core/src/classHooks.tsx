@@ -1,5 +1,19 @@
 import React from 'react';
-import { HookFieldSync } from './HookFieldSync';
+
+export type HookBridgeProps<T> = {
+  hook: () => T;
+  onChange: (value: T) => void;
+};
+
+export function HookFieldSync<T>({ hook, onChange }: HookBridgeProps<T>): React.ReactElement | null {
+  const value = hook();
+
+  React.useEffect(() => {
+    onChange(value);
+  }, [value]);
+
+  return null;
+}
 
 type HookConfig<T = any> = {
   name: string;
@@ -8,26 +22,31 @@ type HookConfig<T = any> = {
 
 type InternalHookConfig = HookConfig<any> & { stateKey: string };
 
-type HookResultMap<T extends Record<string, () => any>> = {
-  [K in keyof T]: ReturnType<T[K]>;
-};
-
 export interface HookBridgeState {
   [key: string]: any;
 }
 
-export function classHooks<THooks extends Record<string, () => any>>(
-  hookDefs: THooks
-) {
-  return class extends React.Component {
-    constructor(...args: [any]) {
-      super(...args);
-      this.hookValues = {} as HookResultMap<THooks>;
-    }
-    declare state: HookBridgeState & HookResultMap<THooks>;
-    declare hookValues: HookResultMap<THooks>;
+type HookResultMap<T extends Record<string, () => any>> = {
+  [K in keyof T]: ReturnType<T[K]>;
+};
 
-    getHookConfigs(): InternalHookConfig[] {
+type MixinResult<
+  TBase extends new (...args: any[]) => React.Component<any, any>,
+  THooks extends Record<string, () => any>
+> = new (...args: ConstructorParameters<TBase>) =>
+  InstanceType<TBase> &
+  HookResultMap<THooks> & {
+    renderClassHooks: () => React.ReactNode;
+  };
+
+export function classHooks<
+  TBase extends new (...args: any[]) => React.Component<any, any>,
+  THooks extends Record<string, () => any>
+>(Base: TBase, hookDefs: THooks): MixinResult<TBase, THooks> {
+  class Mixed extends Base {
+    declare state: HookBridgeState & HookResultMap<THooks>;
+
+    private getHookConfigs(): InternalHookConfig[] {
       return Object.entries(hookDefs).map(([name, hook]) => ({
         name,
         hook,
@@ -35,22 +54,19 @@ export function classHooks<THooks extends Record<string, () => any>>(
       }));
     }
 
-    getHookFieldNames(): string[] {
-      return this.getHookConfigs().map((c) => c.name);
-    }
-
     renderClassHooks(): React.ReactNode {
-      return this.getHookConfigs().map((config) => {
-        const { hook, name, stateKey } = config;
+      return this.getHookConfigs().map(({ hook, name, stateKey }) => {
         const onChange = (value: any) => {
           if ((this.state?.[stateKey] ?? null) !== value) {
             this.setState({ [stateKey]: value });
           }
-          (this as any).hookValues ||= {};
-          (this as any).hookValues[name] = value;
+          (this as any)[name] = value;
         };
         return <HookFieldSync key={name} hook={hook} onChange={onChange} />;
       });
     }
-  };
+  }
+
+  // Safe cast to satisfy TypeScript without overlap error
+  return Mixed as unknown as MixinResult<TBase, THooks>;
 }

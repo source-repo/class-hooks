@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { use, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { classHooks } from '@core';
 
@@ -24,13 +24,65 @@ const hooks = {
   },
 }
 
-class App extends classHooks(hooks) {
+class Logger extends React.Component {
+  something() {
+     return 'something';
+  }
+  render() {
+    return (
+      <div>
+      </div>
+    );
+  }
+}
+
+const EnhancedLogger = classHooks(Logger, hooks);
+
+class MoreEnhancedLogger extends EnhancedLogger {
   render() {
     return (
       <div>
         {this.renderClassHooks()}
-        <h1>Window Width: {this.hookValues.windowWidth}px</h1>
-        <h2>Current Time: {this.hookValues.currentTime}</h2>
+        <h3>Window Width: {this.windowWidth}px !!</h3>
+        <h4>Current Time: {this.currentTime}</h4>
+      </div>
+    );
+  }
+}
+
+const MostEnhancedLogger = classHooks(MoreEnhancedLogger, { doSomething:
+  () => useState(0)
+});
+
+class ShowMostEnhancedLogger extends MostEnhancedLogger {
+  componentWillMount(): void {
+    setInterval(() => {
+      if (this.doSomething)
+        this.doSomething[1](this.doSomething[0] + 1);
+    }, 1000);
+  }
+  render() {
+    return (
+      <div>
+        {this.renderClassHooks()}
+        <h5>Window Width: {this.windowWidth}px !!</h5>
+        <h6>Current Time: {this.currentTime}</h6>
+        <h6>Do Something: {this.doSomething ? this.doSomething[0] : ''}</h6>
+      </div>
+    );
+  }
+}
+
+class App extends EnhancedLogger {
+  render() {
+    return (
+      <div>
+        {this.renderClassHooks()}
+        <h1>Window Width: {this.windowWidth}px</h1>
+        <h2>Current Time: {this.currentTime}</h2>
+        <MoreEnhancedLogger />
+        <MostEnhancedLogger />
+        <ShowMostEnhancedLogger />
       </div>
     );
   }

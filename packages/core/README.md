@@ -15,11 +15,11 @@ Powerful, composable logic without sacrificing inheritance when needed.
 
 ## Features
 
-- Access hook results as class instance fields
+- Access hook results directly as class instance fields
 - Works with multiple hooks
 - Full TypeScript support with auto-inferred types
 - ESM-first, with CommonJS fallback
-- No HOCs or decorators needed
+- No HOCs, decorators, or boilerplate required
 
 ## Installation
 
@@ -39,13 +39,13 @@ const hooks = {
   currentTime: useCurrentTime,
 };
 
-class MainDisplay extends classHooks(hooks) {
+class MainDisplay extends classHooks(React.Component, hooks) {
   render() {
     return (
       <div>
         {this.renderClassHooks()}
-        <h1>Width: {this.hookValues.windowWidth}px</h1>
-        <h2>Time: {this.hookValues.currentTime}</h2>
+        <h1>Width: {this.windowWidth}px</h1>
+        <h2>Time: {this.currentTime}</h2>
       </div>
     );
   }
@@ -54,47 +54,34 @@ class MainDisplay extends classHooks(hooks) {
 
 ## How it works
 
-Internally, your hooks are rendered as hidden components. Their return values are injected into your class through a `hookValues` property, with proper typing.
+Internally, your hooks are rendered as hidden bridge components. Their return values are assigned to class fields (matching the hook names you provide).
 
 Use `this.renderClassHooks()` once in your render tree to activate the internal sync.
 
 ## API
 
-### `classHooks(hooks)`
+### `classHooks(BaseComponent, hooks)`
 
-Wraps your class to inject the defined hooks. `hooks` should be an object where each key maps to a custom hook.
+Wraps your class to inject the defined hooks. Parameters:
+
+- `BaseComponent`: usually `React.Component` or `React.PureComponent`
+- `hooks`: an object where each key maps to a hook function
+
+Returns an extended class that:
+- Has a field for each hook (e.g., `this.windowWidth`)
+- Includes a `renderClassHooks()` method to include in your render tree
 
 ```ts
 const hooks = {
-  someValue: () => useSomething(),
+  count: useCounter,
 };
 
-class MyComponent extends classHooks(hooks) { ... }
-```
-
-Inside your component, you'll have access to:
-
-- `this.hookValues.someValue` – live hook value
-- `this.renderClassHooks()` – renders hidden bridge components
-- `this.getHookFieldNames()` – returns array of hook names
-
-## Example
-
-```tsx
-function useNow() {
-  return new Date().toISOString();
-}
-
-const hooks = {
-  now: useNow,
-};
-
-class Clock extends classHooks(hooks) {
+class Counter extends classHooks(React.Component, hooks) {
   render() {
     return (
       <>
         {this.renderClassHooks()}
-        <span>{this.hookValues.now}</span>
+        <p>{this.count}</p>
       </>
     );
   }
