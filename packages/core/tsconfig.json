@@ -4,7 +4,7 @@
     "compilerOptions": {
       "outDir": "dist",
       "rootDir": "src",
-      "jsx": "react-jsx"  // 👈 This is the fix
+      "jsx": "react-jsx"
     },
     "include": ["src"]
   }

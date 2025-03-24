@@ -1,6 +1,6 @@
 {
   "name": "@diginet/class-hooks",
-  "version": "2.0.0",
+  "version": "2.0.4",
   "description": "Use React hooks in class components with field bindings",
   "main": "./dist/cjs/index.js",
   "module": "./dist/index.js",
@@ -13,7 +13,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "tsc && tsc --module commonjs --outDir dist/cjs",
@@ -30,5 +31,26 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0"
-  }
+  },
+  "keywords": [
+    "react",
+    "react hooks",
+    "class components",
+    "hooks in classes",
+    "typescript",
+    "oop react",
+    "react mixins",
+    "react bridge",
+    "react hook bridge",
+    "classHooks",
+    "react utilities",
+    "react integration",
+    "modern react",
+    "react compatibility",
+    "react class decorators",
+    "inheritance",
+    "react hook wrapper",
+    "react patterns",
+    "react class lifecycle"
+  ]
 }

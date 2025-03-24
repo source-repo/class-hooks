@@ -64,7 +64,7 @@ Use `this.renderClassHooks()` once in your render tree to activate the internal 
 
 Wraps your class to inject the defined hooks. Parameters:
 
-- `BaseComponent`: usually `React.Component` or `React.PureComponent`
+- `BaseComponent`: usually `React.Component` or `React.PureComponent`. Can also be any existing React component class that you want to add hooks to.
 - `hooks`: an object where each key maps to a hook function
 
 Returns an extended class that:
