@@ -1,6 +1,7 @@
 import React, { use, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { classHooks } from '@core';
+import { ItemCounter } from './params';
 
 const hooks = {
   windowWidth: () => {
@@ -49,12 +50,12 @@ class MoreEnhancedLogger extends EnhancedLogger {
     );
   }
 }
-
-const MostEnhancedLogger = classHooks(MoreEnhancedLogger, { doSomething:
-  () => useState(0)
+class MostEnhancedLoggerBase extends MoreEnhancedLogger {}
+const MostEnhancedLogger = classHooks(MostEnhancedLoggerBase, {
+  doSomething: () => useState(0),
 });
 
-class ShowMostEnhancedLogger extends MostEnhancedLogger {
+const ShowMostEnhancedLogger = class extends MostEnhancedLogger {
   componentWillMount(): void {
     setInterval(() => {
       if (this.doSomething)
@@ -78,11 +79,14 @@ class App extends EnhancedLogger {
     return (
       <div>
         {this.renderClassHooks()}
+        {/*
         <h1>Window Width: {this.windowWidth}px</h1>
         <h2>Current Time: {this.currentTime}</h2>
         <MoreEnhancedLogger />
         <MostEnhancedLogger />
         <ShowMostEnhancedLogger />
+        */}
+        <ItemCounter />
       </div>
     );
   }
